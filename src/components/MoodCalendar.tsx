@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -127,32 +127,30 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle>
-          <div className="flex items-center justify-between mb-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handlePrevMonth}
-              aria-label="Previous month"
-              className="mr-2"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
-            <span className="font-semibold text-lg">
-              {MONTHS[displayMonth]} {displayYear}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleNextMonth}
-              aria-label="Next month"
-              className="ml-2"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </Button>
-          </div>
-          Mood Calendar
-        </CardTitle>
+        <CardTitle className="mb-2">Mood Calendar</CardTitle>
+        <div className="flex items-center justify-between mb-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handlePrevMonth}
+            aria-label="Previous month"
+            className="mr-2"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <span className="font-semibold text-lg">
+            {MONTHS[displayMonth]} {displayYear}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleNextMonth}
+            aria-label="Next month"
+            className="ml-2"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label="Mood calendar">
