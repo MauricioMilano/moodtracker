@@ -63,11 +63,14 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
                   key={m.value}
                   type="button"
                   variant={isSelected ? "default" : "outline"}
-                  className={`flex-1 min-w-[90px] ${m.color} transition-all
+                  className={`
+                    flex-1 min-w-[90px] ${m.color} transition-all
                     ${isSelected
-                      ? "ring-2 ring-primary border-primary shadow-lg scale-105 text-black hover:text-white"
+                      ? "ring-2 ring-primary border-primary shadow-lg scale-105 text-black dark:bg-black dark:text-white dark:hover:text-black"
                       : "border border-gray-300"
                     }
+                    dark:bg-black dark:text-white dark:hover:text-black
+                    hover:text-white
                   `}
                   onClick={() => setMood(m.value)}
                   aria-label={m.label}
