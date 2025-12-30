@@ -6,6 +6,17 @@ import MoodCalendar from "@/components/MoodCalendar";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { showSuccess } from "@/utils/toast";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 const LOCAL_STORAGE_KEY = "mood_entries";
 
@@ -16,6 +27,7 @@ function getDateKey(date: string | Date) {
 
 const Index = () => {
   const [entries, setEntries] = useState<MoodEntry[]>([]);
+  const [open, setOpen] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -49,6 +61,7 @@ const Index = () => {
     setEntries([]);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     showSuccess("All mood data cleared!");
+    setOpen(false);
   };
 
   return (
@@ -59,9 +72,30 @@ const Index = () => {
           Track your mood and reflect on your day.
         </p>
         <div className="flex justify-end mb-2">
-          <Button variant="destructive" onClick={handleClearAll}>
-            Clear All Data
-          </Button>
+          <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" onClick={() => setOpen(true)}>
+                Clear All Data
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all your mood entries. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-destructive text-white hover:bg-destructive/90"
+                  onClick={handleClearAll}
+                >
+                  Yes, clear all
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <MoodEntryForm onAdd={handleAddEntry} />
         <MoodCalendar entries={entries} />
