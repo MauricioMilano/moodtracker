@@ -27,9 +27,12 @@ import { MoreVertical } from "lucide-react";
 
 const LOCAL_STORAGE_KEY = "mood_entries";
 
-function getDateKey(date: string | Date) {
-  const d = typeof date === "string" ? new Date(date) : date;
-  return d.toISOString().slice(0, 10);
+// Returns yyyy-mm-dd string in GMT-3 for a given date
+function getDateKeyGMT3(date: string | Date) {
+  const d = typeof date === "string" ? new Date(date) : new Date(date);
+  // Convert to GMT-3 by subtracting 3 hours from UTC
+  const gmt3 = new Date(d.getTime() - 3 * 60 * 60 * 1000);
+  return gmt3.toISOString().slice(0, 10);
 }
 
 const Index = () => {
@@ -53,13 +56,14 @@ const Index = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(entries));
   }, [entries]);
 
-  // Only allow one mood per day
+  // Only allow one mood per day (in GMT-3)
   const handleAddEntry = (entry: MoodEntry) => {
-    const todayKey = getDateKey(entry.date);
+    const todayKey = getDateKeyGMT3(new Date());
+    const entryKey = getDateKeyGMT3(entry.date);
     setEntries((prev) => {
-      // Remove any entry for today
-      const filtered = prev.filter((e) => getDateKey(e.date) !== todayKey);
-      return [...filtered, entry];
+      // Remove any entry for today (in GMT-3)
+      const filtered = prev.filter((e) => getDateKeyGMT3(e.date) !== todayKey);
+      return [...filtered, { ...entry, date: new Date().toISOString() }];
     });
     showSuccess("Mood entry saved for today!");
   };
