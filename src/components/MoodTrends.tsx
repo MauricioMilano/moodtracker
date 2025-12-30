@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Input } from "@/components/ui/input";
 import type { MoodEntry } from "./MoodEntryForm";
 
 // Define moods with levels (higher = better mood)
@@ -33,18 +34,30 @@ type Props = {
 };
 
 const MoodTrends: React.FC<Props> = ({ entries }) => {
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
   if (entries.length === 0) {
     return null;
   }
 
   // Prepare data for chart
-  const data = entries.map((entry) => ({
+  let data = entries.map((entry) => ({
     date: new Date(entry.date).toLocaleDateString(),
     moodLevel: MOOD_LEVELS[entry.mood] ?? 0,
     mood: entry.mood,
     moodShort: MOOD_SHORT[entry.mood] || entry.mood,
     moodLabel: MOOD_LABELS[entry.mood] || entry.mood,
+    rawDate: entry.date,
   }));
+
+  // Filter by date range
+  if (dateFrom) {
+    data = data.filter((d) => new Date(d.rawDate) >= new Date(dateFrom));
+  }
+  if (dateTo) {
+    data = data.filter((d) => new Date(d.rawDate) <= new Date(dateTo));
+  }
 
   // For Y-axis ticks, show all mood levels in order
   const yTicks = MOODS.map((m) => m.level);
@@ -52,9 +65,32 @@ const MoodTrends: React.FC<Props> = ({ entries }) => {
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle>Mood Trends</CardTitle>
+        <CardTitle>
+          Mood Trends
+          <span className="ml-2 text-xs font-normal text-gray-500">(Custom Range)</span>
+        </CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">From</label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={e => setDateFrom(e.target.value)}
+              aria-label="Trends from date"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">To</label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={e => setDateTo(e.target.value)}
+              aria-label="Trends to date"
+            />
+          </div>
+        </div>
         <div className="h-56">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data}>

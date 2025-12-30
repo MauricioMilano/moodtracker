@@ -68,6 +68,14 @@ const Index = () => {
     showSuccess("Mood entry saved for today!");
   };
 
+  // Edit mood entry note from calendar dialog
+  const handleEditEntry = (updated: MoodEntry) => {
+    setEntries((prev) =>
+      prev.map((e) => (e.id === updated.id ? updated : e))
+    );
+    showSuccess("Mood entry updated!");
+  };
+
   const handleClearAll = () => {
     setEntries([]);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -129,7 +137,7 @@ const Index = () => {
           Track your mood and reflect on your day.
         </p>
         <MoodEntryForm onAdd={handleAddEntry} />
-        <MoodCalendar entries={entries} />
+        <MoodCalendar entries={entries} onEditEntry={handleEditEntry} />
         <MoodTrends entries={entries} />
         <MoodHistory entries={entries} />
         <MadeWithDyad />
