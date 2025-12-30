@@ -155,7 +155,13 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
       <CardContent>
         <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label="Mood calendar">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="font-semibold text-xs text-gray-500" role="columnheader">{d}</div>
+            <div
+              key={d}
+              className="font-semibold text-xs text-gray-500 dark:text-gray-400"
+              role="columnheader"
+            >
+              {d}
+            </div>
           ))}
           {/* Padding for first day */}
           {Array(firstDay.getUTCDay())
@@ -170,8 +176,10 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
             return (
               <button
                 key={key}
-                className={`h-12 w-full flex flex-col items-center justify-center border rounded bg-white focus:outline-none focus:ring-2 focus:ring-primary transition
+                className={`h-12 w-full flex flex-col items-center justify-center border rounded
+                  bg-white focus:outline-none focus:ring-2 focus:ring-primary transition
                   ${entry ? "cursor-pointer hover:bg-primary/10" : "cursor-pointer"}
+                  dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:hover:bg-white/10
                 `}
                 role="cell"
                 aria-label={`Day ${date.getUTCDate()}${mood ? `, Mood: ${MOOD_SHORT[mood]}` : ""}`}
@@ -179,7 +187,7 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
                 onClick={() => handleDayClick(date)}
                 type="button"
               >
-                <span className="text-xs text-gray-400">{date.getUTCDate()}</span>
+                <span className="text-xs text-gray-400 dark:text-gray-300">{date.getUTCDate()}</span>
                 <span className="text-lg">{mood ? MOOD_SHORT[mood] : ""}</span>
               </button>
             );
