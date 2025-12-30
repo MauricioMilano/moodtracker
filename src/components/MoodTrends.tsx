@@ -3,13 +3,31 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import type { MoodEntry } from "./MoodEntryForm";
 
-const MOOD_ORDER = ["sad", "anxious", "angry", "neutral", "happy"];
+const MOOD_ORDER = [
+  "sad",
+  "anxious",
+  "angry",
+  "neutral",
+  "happy",
+  "excited",
+  "tired",
+  "grateful",
+  "stressed",
+  "relaxed",
+  "bored",
+];
 const MOOD_LABELS: Record<string, string> = {
   happy: "😊",
   neutral: "😐",
   sad: "😔",
   angry: "😠",
   anxious: "😰",
+  excited: "🤩",
+  tired: "😴",
+  grateful: "🙏",
+  stressed: "😣",
+  relaxed: "😌",
+  bored: "🥱",
 };
 
 function moodToValue(mood: string) {

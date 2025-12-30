@@ -8,6 +8,12 @@ const MOOD_LABELS: Record<string, string> = {
   sad: "😔 Sad",
   angry: "😠 Angry",
   anxious: "😰 Anxious",
+  excited: "🤩 Excited",
+  tired: "😴 Tired",
+  grateful: "🙏 Grateful",
+  stressed: "😣 Stressed",
+  relaxed: "😌 Relaxed",
+  bored: "🥱 Bored",
 };
 
 type Props = {

@@ -10,6 +10,12 @@ const MOODS = [
   { label: "😔 Sad", value: "sad", color: "bg-blue-200" },
   { label: "😠 Angry", value: "angry", color: "bg-red-200" },
   { label: "😰 Anxious", value: "anxious", color: "bg-purple-200" },
+  { label: "🤩 Excited", value: "excited", color: "bg-pink-200" },
+  { label: "😴 Tired", value: "tired", color: "bg-indigo-200" },
+  { label: "🙏 Grateful", value: "grateful", color: "bg-green-200" },
+  { label: "😣 Stressed", value: "stressed", color: "bg-orange-200" },
+  { label: "😌 Relaxed", value: "relaxed", color: "bg-teal-200" },
+  { label: "🥱 Bored", value: "bored", color: "bg-gray-300" },
 ];
 
 export type MoodEntry = {
