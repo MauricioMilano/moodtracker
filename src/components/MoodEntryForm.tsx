@@ -56,24 +56,28 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4" aria-label="Mood entry form">
           <div className="flex flex-wrap gap-2" role="group" aria-label="Mood selection">
-            {MOODS.map((m) => (
-              <Button
-                key={m.value}
-                type="button"
-                variant={mood === m.value ? "default" : "outline"}
-                className={`flex-1 min-w-[90px] ${m.color} transition-all ${
-                  mood === m.value
-                    ? "ring-2 ring-primary border-primary shadow-lg scale-105"
-                    : "border border-gray-300"
-                }`}
-                onClick={() => setMood(m.value)}
-                aria-label={m.label}
-                aria-pressed={mood === m.value}
-                tabIndex={0}
-              >
-                {m.label}
-              </Button>
-            ))}
+            {MOODS.map((m) => {
+              const isSelected = mood === m.value;
+              return (
+                <Button
+                  key={m.value}
+                  type="button"
+                  variant={isSelected ? "default" : "outline"}
+                  className={`flex-1 min-w-[90px] ${m.color} transition-all
+                    ${isSelected
+                      ? "ring-2 ring-primary border-primary shadow-lg scale-105 text-black hover:text-white"
+                      : "border border-gray-300"
+                    }
+                  `}
+                  onClick={() => setMood(m.value)}
+                  aria-label={m.label}
+                  aria-pressed={isSelected}
+                  tabIndex={0}
+                >
+                  {m.label}
+                </Button>
+              );
+            })}
           </div>
           <Textarea
             placeholder="Write a short note (optional)..."
