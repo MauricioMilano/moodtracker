@@ -68,6 +68,8 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
                       ? "ring-2 ring-primary border-primary shadow-lg scale-105 text-black hover:text-white"
                       : "border border-gray-300"
                     }
+                    dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black
+                    ${isSelected ? "dark:text-white dark:hover:text-black" : ""}
                   `}
                   onClick={() => setMood(m.value)}
                   aria-label={m.label}
