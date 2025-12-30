@@ -6,6 +6,7 @@ import MoodCalendar from "@/components/MoodCalendar";
 import { Button } from "@/components/ui/button";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { showSuccess } from "@/utils/toast";
+import ThemeToggle from "@/components/ThemeToggle";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -84,10 +85,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-2">
+    <div className="min-h-screen bg-gray-100 dark:bg-background flex flex-col items-center py-8 px-2 transition-colors">
       <div className="w-full max-w-xl">
         <div className="flex justify-between items-center mb-2">
-          <div />
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu" aria-haspopup="true">
@@ -133,7 +134,7 @@ const Index = () => {
           </DropdownMenu>
         </div>
         <h1 className="text-3xl font-bold mb-2 text-center">Mood Journal & Tracker</h1>
-        <p className="text-gray-600 mb-6 text-center">
+        <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
           Track your mood and reflect on your day.
         </p>
         <MoodEntryForm onAdd={handleAddEntry} />
