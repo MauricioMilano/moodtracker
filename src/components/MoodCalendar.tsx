@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { MoodEntry } from "./MoodEntryForm";
 
 const MOOD_SHORT: Record<string, string> = {
@@ -56,19 +57,24 @@ function getMoodByDate(entries: MoodEntry[]) {
   return map;
 }
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
   const moodMap = getMoodByDate(entries);
 
-  // Get all days in the current month (in GMT-3)
-  const today = new Date();
-  const gmt3Now = new Date(today.getTime() - 3 * 60 * 60 * 1000);
-  const year = gmt3Now.getFullYear();
-  const month = gmt3Now.getMonth();
+  // State for displayed month/year (in GMT-3)
+  const now = new Date();
+  const gmt3Now = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+  const [displayYear, setDisplayYear] = useState(gmt3Now.getFullYear());
+  const [displayMonth, setDisplayMonth] = useState(gmt3Now.getMonth());
 
-  // First day of month
-  const firstDay = new Date(Date.UTC(year, month, 1, 3, 0, 0)); // 3:00 UTC = 00:00 GMT-3
-  // Last day of month
-  const lastDay = new Date(Date.UTC(year, month + 1, 0, 3, 0, 0));
+  // First day of month (GMT-3)
+  const firstDay = new Date(Date.UTC(displayYear, displayMonth, 1, 3, 0, 0)); // 3:00 UTC = 00:00 GMT-3
+  // Last day of month (GMT-3)
+  const lastDay = new Date(Date.UTC(displayYear, displayMonth + 1, 0, 3, 0, 0));
 
   // Build days array
   const days: Date[] = [];
@@ -98,10 +104,55 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
     setEditOpen(false);
   };
 
+  const handlePrevMonth = () => {
+    setDisplayMonth((prev) => {
+      if (prev === 0) {
+        setDisplayYear((y) => y - 1);
+        return 11;
+      }
+      return prev - 1;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setDisplayMonth((prev) => {
+      if (prev === 11) {
+        setDisplayYear((y) => y + 1);
+        return 0;
+      }
+      return prev + 1;
+    });
+  };
+
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle>Mood Calendar</CardTitle>
+        <CardTitle>
+          <div className="flex items-center justify-between mb-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handlePrevMonth}
+              aria-label="Previous month"
+              className="mr-2"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <span className="font-semibold text-lg">
+              {MONTHS[displayMonth]} {displayYear}
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleNextMonth}
+              aria-label="Next month"
+              className="ml-2"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+          </div>
+          Mood Calendar
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label="Mood calendar">
