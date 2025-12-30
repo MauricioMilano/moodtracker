@@ -40,12 +40,17 @@ const MoodHistory: React.FC<Props> = ({ entries }) => {
         <CardTitle>Mood History</CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-gray-200" role="list" aria-label="Mood history">
           {entries
             .slice()
             .reverse()
             .map((entry) => (
-              <li key={entry.id} className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <li
+                key={entry.id}
+                className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between"
+                role="listitem"
+                aria-label={`Mood: ${MOOD_LABELS[entry.mood] || entry.mood}, Date: ${new Date(entry.date).toLocaleString()}${entry.note ? `, Note: ${entry.note}` : ""}`}
+              >
                 <div>
                   <span className="font-semibold">{MOOD_LABELS[entry.mood] || entry.mood}</span>
                   <span className="ml-2 text-xs text-gray-400">

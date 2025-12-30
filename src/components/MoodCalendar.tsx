@@ -57,9 +57,9 @@ const MoodCalendar: React.FC<Props> = ({ entries }) => {
         <CardTitle>Mood Calendar</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-7 gap-2 text-center">
+        <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label="Mood calendar">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="font-semibold text-xs text-gray-500">{d}</div>
+            <div key={d} className="font-semibold text-xs text-gray-500" role="columnheader">{d}</div>
           ))}
           {/* Padding for first day */}
           {Array(firstDay.getDay())
@@ -74,6 +74,9 @@ const MoodCalendar: React.FC<Props> = ({ entries }) => {
               <div
                 key={key}
                 className="h-12 flex flex-col items-center justify-center border rounded bg-white"
+                role="cell"
+                aria-label={`Day ${date.getDate()}${mood ? `, Mood: ${MOOD_SHORT[mood]}` : ""}`}
+                tabIndex={0}
               >
                 <span className="text-xs text-gray-400">{date.getDate()}</span>
                 <span className="text-lg">{mood ? MOOD_SHORT[mood] : ""}</span>

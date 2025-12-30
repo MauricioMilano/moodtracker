@@ -54,8 +54,8 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
         <CardTitle>How are you feeling?</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+        <form onSubmit={handleSubmit} className="space-y-4" aria-label="Mood entry form">
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Mood selection">
             {MOODS.map((m) => (
               <Button
                 key={m.value}
@@ -63,6 +63,9 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
                 variant={mood === m.value ? "default" : "outline"}
                 className={`flex-1 min-w-[90px] ${m.color}`}
                 onClick={() => setMood(m.value)}
+                aria-label={m.label}
+                aria-pressed={mood === m.value}
+                tabIndex={0}
               >
                 {m.label}
               </Button>
@@ -74,8 +77,9 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
             onChange={(e) => setNote(e.target.value)}
             className="resize-none"
             maxLength={200}
+            aria-label="Mood note"
           />
-          <Button type="submit" disabled={!mood}>
+          <Button type="submit" disabled={!mood} aria-disabled={!mood} aria-label="Add mood entry">
             Add Entry
           </Button>
         </form>

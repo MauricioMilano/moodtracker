@@ -78,7 +78,7 @@ const Index = () => {
           <div />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Menu">
+              <Button variant="ghost" size="icon" aria-label="Open menu" aria-haspopup="true">
                 <MoreVertical className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -91,6 +91,7 @@ const Index = () => {
                       e.preventDefault();
                       setOpen(true);
                     }}
+                    aria-label="Clear all mood data"
                   >
                     Clear All Data
                   </DropdownMenuItem>
@@ -103,10 +104,13 @@ const Index = () => {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel onClick={() => setOpen(false)} aria-label="Cancel clear all">
+                      Cancel
+                    </AlertDialogCancel>
                     <AlertDialogAction
                       className="bg-destructive text-white hover:bg-destructive/90"
                       onClick={handleClearAll}
+                      aria-label="Confirm clear all mood data"
                     >
                       Yes, clear all
                     </AlertDialogAction>
