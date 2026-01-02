@@ -6,6 +6,7 @@ import MoodCalendar from "@/components/MoodCalendar";
 import { Button } from "@/components/ui/button";
 import { showSuccess } from "@/utils/toast";
 import ThemeToggle from "@/components/ThemeToggle";
+import Logo from "@/components/Logo";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -88,6 +89,7 @@ const Index = () => {
       <div className="w-full max-w-xl">
         <div className="flex justify-between items-center mb-2">
           <ThemeToggle />
+          <div />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu" aria-haspopup="true">
@@ -132,6 +134,12 @@ const Index = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+
+        {/* New logo inserted */}
+        <div className="flex justify-center mb-4">
+          <Logo />
+        </div>
+
         <h1 className="text-3xl font-bold mb-2 text-center">Mood Journal & Tracker</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
           Track your mood and reflect on your day.
