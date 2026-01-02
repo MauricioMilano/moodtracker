@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { MoodEntry } from "./MoodEntryForm";
+import { useTranslation } from "react-i18next";
 
 const MOOD_SHORT: Record<string, string> = {
   happy: "😊",
@@ -20,18 +21,18 @@ const MOOD_SHORT: Record<string, string> = {
   bored: "🥱",
 };
 
-const MOOD_LABELS: Record<string, string> = {
-  happy: "😊 Happy",
-  neutral: "😐 Neutral",
-  sad: "😔 Sad",
-  angry: "😠 Angry",
-  anxious: "😰 Anxious",
-  excited: "🤩 Excited",
-  tired: "😴 Tired",
-  grateful: "🙏 Grateful",
-  stressed: "😣 Stressed",
-  relaxed: "😌 Relaxed",
-  bored: "🥱 Bored",
+const MOOD_LABELS_BASE: Record<string, string> = {
+  happy: "Happy",
+  neutral: "Neutral",
+  sad: "Sad",
+  angry: "Angry",
+  anxious: "Anxious",
+  excited: "Excited",
+  tired: "Tired",
+  grateful: "Grateful",
+  stressed: "Stressed",
+  relaxed: "Relaxed",
+  bored: "Bored",
 };
 
 // Returns yyyy-mm-dd string in GMT-3 for a given date
@@ -57,12 +58,8 @@ function getMoodByDate(entries: MoodEntry[]) {
   return map;
 }
 
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
 const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
+  const { t } = useTranslation();
   const moodMap = getMoodByDate(entries);
 
   // State for displayed month/year (in GMT-3)
@@ -124,28 +121,36 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
     });
   };
 
+  const months: string[] = t("months", { returnObjects: true }) as string[];
+  const weekdays: string[] = t("weekdays", { returnObjects: true }) as string[];
+
+  const MOOD_LABELS: Record<string, string> = Object.keys(MOOD_LABELS_BASE).reduce((acc, key) => {
+    acc[key] = `${MOOD_SHORT[key]} ${t(`moods.${key}`)}`;
+    return acc;
+  }, {} as Record<string, string>);
+
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle className="mb-2">Mood Calendar</CardTitle>
+        <CardTitle className="mb-2">{t("mood_calendar")}</CardTitle>
         <div className="flex items-center justify-between mb-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={handlePrevMonth}
-            aria-label="Previous month"
+            aria-label={t("prev_month")}
             className="mr-2"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
           <span className="font-semibold text-lg">
-            {MONTHS[displayMonth]} {displayYear}
+            {months[displayMonth]} {displayYear}
           </span>
           <Button
             variant="ghost"
             size="icon"
             onClick={handleNextMonth}
-            aria-label="Next month"
+            aria-label={t("next_month")}
             className="ml-2"
           >
             <ChevronRight className="w-5 h-5" />
@@ -153,8 +158,8 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label="Mood calendar">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+        <div className="grid grid-cols-7 gap-2 text-center" role="table" aria-label={t("mood_calendar")}>
+          {weekdays.map((d) => (
             <div
               key={d}
               className="font-semibold text-xs text-gray-500 dark:text-gray-400"
@@ -182,7 +187,7 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
                   dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:hover:bg-white/10
                 `}
                 role="cell"
-                aria-label={`Day ${date.getUTCDate()}${mood ? `, Mood: ${MOOD_SHORT[mood]}` : ""}`}
+                aria-label={`Day ${date.getUTCDate()}${mood ? `, Mood: ${MOOD_LABELS[mood] || mood}` : ""}`}
                 tabIndex={0}
                 onClick={() => handleDayClick(date)}
                 type="button"
@@ -198,8 +203,12 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
             <DialogHeader>
               <DialogTitle>
                 {selectedDay
-                  ? `Entry for ${selectedDay.toLocaleDateString("en-GB", { timeZone: "America/Sao_Paulo" })}`
-                  : "Entry"}
+                  ? t("entry_for", {
+                      date: selectedDay.toLocaleDateString("en-GB", { timeZone: "America/Sao_Paulo" }),
+                    })
+                  : t("entry_for", {
+                      date: "",
+                    })}
               </DialogTitle>
             </DialogHeader>
             {selectedDay && (() => {
@@ -216,22 +225,22 @@ const MoodCalendar: React.FC<Props> = ({ entries, onEditEntry }) => {
                       onChange={e => setEditNote(e.target.value)}
                       className="resize-none"
                       maxLength={200}
-                      aria-label="Edit note"
+                      aria-label={t("save_note")}
                     />
                   </div>
                 );
               } else {
                 return (
-                  <div className="text-gray-500">No entry for this day.</div>
+                  <div className="text-gray-500">{t("no_entry_day")}</div>
                 );
               }
             })()}
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditOpen(false)}>
-                Close
+                {t("close")}
               </Button>
               {selectedDay && moodMap[getDateKeyGMT3(selectedDay)] && (
-                <Button onClick={handleSave}>Save Note</Button>
+                <Button onClick={handleSave}>{t("save_note")}</Button>
               )}
             </DialogFooter>
           </DialogContent>

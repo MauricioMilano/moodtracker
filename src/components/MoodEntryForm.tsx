@@ -3,19 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { showSuccess } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
-const MOODS = [
-  { label: "😊 Happy", value: "happy", color: "bg-yellow-200" },
-  { label: "😐 Neutral", value: "neutral", color: "bg-gray-200" },
-  { label: "😔 Sad", value: "sad", color: "bg-blue-200" },
-  { label: "😠 Angry", value: "angry", color: "bg-red-200" },
-  { label: "😰 Anxious", value: "anxious", color: "bg-purple-200" },
-  { label: "🤩 Excited", value: "excited", color: "bg-pink-200" },
-  { label: "😴 Tired", value: "tired", color: "bg-indigo-200" },
-  { label: "🙏 Grateful", value: "grateful", color: "bg-green-200" },
-  { label: "😣 Stressed", value: "stressed", color: "bg-orange-200" },
-  { label: "😌 Relaxed", value: "relaxed", color: "bg-teal-200" },
-  { label: "🥱 Bored", value: "bored", color: "bg-gray-300" },
+const MOOD_DEFS = [
+  { emoji: "😊", value: "happy", color: "bg-yellow-200" },
+  { emoji: "😐", value: "neutral", color: "bg-gray-200" },
+  { emoji: "😔", value: "sad", color: "bg-blue-200" },
+  { emoji: "😠", value: "angry", color: "bg-red-200" },
+  { emoji: "😰", value: "anxious", color: "bg-purple-200" },
+  { emoji: "🤩", value: "excited", color: "bg-pink-200" },
+  { emoji: "😴", value: "tired", color: "bg-indigo-200" },
+  { emoji: "🙏", value: "grateful", color: "bg-green-200" },
+  { emoji: "😣", value: "stressed", color: "bg-orange-200" },
+  { emoji: "😌", value: "relaxed", color: "bg-teal-200" },
+  { emoji: "🥱", value: "bored", color: "bg-gray-300" },
 ];
 
 export type MoodEntry = {
@@ -30,8 +31,14 @@ type Props = {
 };
 
 const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
+  const { t } = useTranslation();
   const [mood, setMood] = useState<string>("");
   const [note, setNote] = useState<string>("");
+
+  const MOODS = MOOD_DEFS.map((m) => ({
+    ...m,
+    label: `${m.emoji} ${t(`moods.${m.value}`)}`,
+  }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +52,13 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
     onAdd(entry);
     setMood("");
     setNote("");
-    showSuccess("Mood entry added!");
+    showSuccess(t("add_entry"));
   };
 
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle>How are you feeling?</CardTitle>
+        <CardTitle>{t("how_are_you")}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4" aria-label="Mood entry form">
@@ -69,8 +76,7 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
                       : "border border-gray-300"
                     }
                     dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black
-                    ${isSelected ? "dark:text-white dark:hover:text-black" : ""}
-                  `}
+                    ${isSelected ? "dark:text-white dark:hover:text-black" : ""}`}
                   onClick={() => setMood(m.value)}
                   aria-label={m.label}
                   aria-pressed={isSelected}
@@ -82,15 +88,15 @@ const MoodEntryForm: React.FC<Props> = ({ onAdd }) => {
             })}
           </div>
           <Textarea
-            placeholder="Write a short note (optional)..."
+            placeholder={t("placeholder_note")}
             value={note}
             onChange={(e) => setNote(e.target.value)}
             className="resize-none"
             maxLength={200}
             aria-label="Mood note"
           />
-          <Button type="submit" disabled={!mood} aria-disabled={!mood} aria-label="Add mood entry">
-            Add Entry
+          <Button type="submit" disabled={!mood} aria-disabled={!mood} aria-label={t("add_entry")}>
+            {t("add_entry")}
           </Button>
         </form>
       </CardContent>

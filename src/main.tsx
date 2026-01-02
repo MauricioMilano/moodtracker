@@ -1,3 +1,4 @@
+import "./i18n";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./globals.css";
@@ -21,7 +22,6 @@ if ("serviceWorker" in navigator) {
       .register("/sw.js")
       .then((registration) => {
         // registration succeeded
-        // console.log("Service Worker registered with scope:", registration.scope);
       })
       .catch((error) => {
         console.error("Service Worker registration failed:", error);

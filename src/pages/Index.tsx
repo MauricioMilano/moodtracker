@@ -6,6 +6,7 @@ import MoodCalendar from "@/components/MoodCalendar";
 import { Button } from "@/components/ui/button";
 import { showSuccess } from "@/utils/toast";
 import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSelector from "@/components/LanguageSelector";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -24,6 +25,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const LOCAL_STORAGE_KEY = "mood_entries";
 
@@ -36,6 +38,7 @@ function getDateKeyGMT3(date: string | Date) {
 }
 
 const Index = () => {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<MoodEntry[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -65,7 +68,7 @@ const Index = () => {
       const filtered = prev.filter((e) => getDateKeyGMT3(e.date) !== todayKey);
       return [...filtered, { ...entry, date: new Date().toISOString() }];
     });
-    showSuccess("Mood entry saved for today!");
+    showSuccess(t("add_entry"));
   };
 
   // Edit mood entry note from calendar dialog
@@ -73,13 +76,13 @@ const Index = () => {
     setEntries((prev) =>
       prev.map((e) => (e.id === updated.id ? updated : e))
     );
-    showSuccess("Mood entry updated!");
+    showSuccess(t("save_note"));
   };
 
   const handleClearAll = () => {
     setEntries([]);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    showSuccess("All mood data cleared!");
+    showSuccess(t("clear_all_data"));
     setOpen(false);
   };
 
@@ -87,10 +90,13 @@ const Index = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-background flex flex-col items-center py-8 px-2 transition-colors">
       <div className="w-full max-w-xl">
         <div className="flex justify-between items-center mb-2">
-          <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <LanguageSelector />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Open menu" aria-haspopup="true">
+              <Button variant="ghost" size="icon" aria-label={t("clear_all_data")} aria-haspopup="true">
                 <MoreVertical className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -103,28 +109,28 @@ const Index = () => {
                       e.preventDefault();
                       setOpen(true);
                     }}
-                    aria-label="Clear all mood data"
+                    aria-label={t("clear_all_data")}
                   >
-                    Clear All Data
+                    {t("clear_all_data")}
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("confirm_clear_title")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will permanently delete all your mood entries. This action cannot be undone.
+                      {t("confirm_clear_desc")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setOpen(false)} aria-label="Cancel clear all">
-                      Cancel
+                    <AlertDialogCancel onClick={() => setOpen(false)} aria-label={t("cancel")}>
+                      {t("cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
                       className="bg-destructive text-white hover:bg-destructive/90"
                       onClick={handleClearAll}
-                      aria-label="Confirm clear all mood data"
+                      aria-label={t("yes_clear")}
                     >
-                      Yes, clear all
+                      {t("yes_clear")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -132,9 +138,9 @@ const Index = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <h1 className="text-3xl font-bold mb-2 text-center">Mood Journal & Tracker</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center">{t("title")}</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
-          Track your mood and reflect on your day.
+          {t("subtitle")}
         </p>
         <MoodEntryForm onAdd={handleAddEntry} />
         <MoodCalendar entries={entries} onEditEntry={handleEditEntry} />
