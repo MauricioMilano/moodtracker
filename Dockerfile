@@ -1,28 +1,27 @@
-# ---- Build stage ----
-FROM node:18-alpine AS builder
+# Stage 1: Build the React application
+FROM node:24 AS build
+
 WORKDIR /app
 
-# Install build deps
-COPY package.json package-lock.json* ./
-RUN npm ci --silent || npm install --silent
+# Copy package files first to leverage Docker layer caching
+COPY package*.json ./
 
-# Copy source and build
+# Install dependencies (uses npm by default; replace if you use pnpm/yarn)
+RUN npm install --no-audit --no-fund
+
+# Copy the rest of the source and build
 COPY . .
 RUN npm run build
 
-# ---- Production stage ----
-FROM nginx:stable-alpine
-# copy nginx config (we provide a custom config below)
+# Stage 2: Serve the application with Nginx
+FROM nginx:alpine
+
+# Copy the build output from the build stage to the Nginx public directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Optional: Copy a custom Nginx configuration if needed
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built assets
-COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
 
-# Ensure permissions are correct
-RUN chown -R nginx:nginx /usr/share/nginx/html
-
-# Expose 8080 to match dev expectation
-EXPOSE 8080
-
-# Start nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
