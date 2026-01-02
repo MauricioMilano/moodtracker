@@ -4,7 +4,6 @@ import MoodHistory from "@/components/MoodHistory";
 import MoodTrends from "@/components/MoodTrends";
 import MoodCalendar from "@/components/MoodCalendar";
 import { Button } from "@/components/ui/button";
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import { showSuccess } from "@/utils/toast";
 import ThemeToggle from "@/components/ThemeToggle";
 import {
@@ -141,7 +140,6 @@ const Index = () => {
         <MoodCalendar entries={entries} onEditEntry={handleEditEntry} />
         <MoodTrends entries={entries} />
         <MoodHistory entries={entries} />
-        <MadeWithDyad />
       </div>
     </div>
   );
