@@ -13,3 +13,18 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </ThemeProvider>
 );
+
+// Register service worker to enable PWA (served from /sw.js)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        // registration succeeded
+        // console.log("Service Worker registered with scope:", registration.scope);
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
