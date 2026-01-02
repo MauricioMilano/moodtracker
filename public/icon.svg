@@ -5,11 +5,6 @@
       <stop offset="0%" stop-color="#6366f1"/>
       <stop offset="100%" stop-color="#a78bfa"/>
     </linearGradient>
-
-    <linearGradient id="tearGrad" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#93c5fd"/>
-      <stop offset="100%" stop-color="#60a5fa"/>
-    </linearGradient>
   </defs>
 
   <!-- Background circle -->
@@ -18,23 +13,6 @@
   <!-- Eyes -->
   <circle cx="23" cy="25" r="3.5" fill="#ffffff"/>
   <circle cx="41" cy="25" r="3.5" fill="#ffffff"/>
-
-  <!-- Tear under right eye (appears under the eye at ~41,25) -->
-  <path
-    d="M46 30
-       C50 36, 46 46, 46 46
-       C46 46, 40 36, 46 30 Z"
-    fill="url(#tearGrad)"
-    opacity="0.98"
-  />
-  <!-- Tear highlight -->
-  <path
-    d="M46 32
-       C48 36, 46 38, 46 38
-       C46 38, 44 36, 46 32 Z"
-    fill="#ffffff"
-    opacity="0.45"
-  />
 
   <!-- Smile -->
   <path d="M20 40c4.5 6 19.5 6 24 0" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" stroke-linejoin="round"/>
